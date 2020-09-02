@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <title>routing.xml editor</title>
+  <style>
+    * { font-family: Helvetica, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="preferences"></div>
+
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+  <script>
+    'use strict';
+
+    const e = React.createElement;
+
+    class ParamSlider extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { value: 50 };
+      }
+
+      render() {
+        let label = this.props.name;
+
+        let slide = e(
+          'input', {
+            type: "range",
+            min: 0, max: 100,
+            onChange: (v) => this.setState({ value: v.target.value }),
+            key: "slide_"+this.props.name
+          }
+        );
+
+        return e(
+          'tr',
+          {key: this.props.name},
+          [
+            e('td', {key:"td_label_"+this.props.name}, label),
+            e('td', {key:"td_slide_"+this.props.name}, slide)
+          ]
+        );
+      }
+    }
+
+    class Sliders extends React.Component {
+      constructor(props) {
+        super(props);
+      }
+      render() {
+        let rows = this.props.params.map((param) => e(ParamSlider, {name: param, key: "paramslider_"+param}));
+        return e(
+          'table',
+          {},
+          e('tbody', {}, rows)
+        )
+      }
+    }
+
+    const domContainer = document.querySelector('#preferences');
+
+    let params = ["grade2", "grade3", "grade4", "grade5"];
+    ReactDOM.render(e(Sliders, {params: params}), domContainer);
+  </script>
+</body>
+</html>
