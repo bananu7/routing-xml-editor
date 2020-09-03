@@ -61,7 +61,15 @@
 
     const domContainer = document.querySelector('#preferences');
 
-    let params = ["grade2", "grade3", "grade4", "grade5"];
+    let params = [
+      "grade2", "grade3", "grade4", "grade5",
+      "unpaved", "compact", "dirt", "earth", "gravel", "fine_gravel", "grass", "ground", "mud", "pebblestone", "sand",
+      "asphalt", "paved", "concrete", "paving_stones",
+
+      "motorway", "trunk", "primary", "secondary", "tertiary",
+
+      "unclassified", "road", "track", "residential", "living_street"
+    ];
     ReactDOM.render(e(Sliders, {params: params}), domContainer);
   </script>
 </body>
