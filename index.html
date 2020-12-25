@@ -19,7 +19,6 @@
     class ParamSlider extends React.Component {
       constructor(props) {
         super(props);
-        this.state = { value: 50 };
       }
 
       render() {
@@ -29,7 +28,8 @@
           'input', {
             type: "range",
             min: 0, max: 100,
-            onChange: (v) => this.setState({ value: v.target.value }),
+            value: this.props.value,
+            onChange: e => this.props.onChange(Number(e.target.value)),
             key: "slide_"+this.props.name
           }
         );
@@ -48,13 +48,41 @@
     class Sliders extends React.Component {
       constructor(props) {
         super(props);
+
+        this.state = {
+          values: this.props.params.reduce((obj, param) => {
+            obj[param] = 50
+            return obj
+          }, {})
+        }
       }
       render() {
-        let rows = this.props.params.map((param) => e(ParamSlider, {name: param, key: "paramslider_"+param}));
+        let rows = this.props.params.map(param => e(ParamSlider, {
+          name: param,
+          key: "paramslider_"+param,
+          value: this.state.values[param],
+          onChange: v => {
+            this.setState(state => {
+              state.values[param] = v
+              return {values: state.values}
+            })
+          }
+        }));
+
+        let button = e('input', {
+          type: "button",
+          onClick: () => {
+            for (const [k,v] of Object.entries(this.state.values)) {
+              console.log(k,v)
+            }
+          }
+        })
+
         return e(
           'table',
           {},
-          e('tbody', {}, rows)
+          e('tbody', {}, rows),
+          e('tfoot', {}, e('tr', {}, e('td', {}, button)))
         )
       }
     }
